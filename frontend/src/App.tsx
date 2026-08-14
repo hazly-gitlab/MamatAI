@@ -7,7 +7,10 @@ import {
 } from 'lucide-react';
 
 // API endpoints with zero-configuration relative path default
-const API_URL = (import.meta as any).env?.VITE_API_URL || '';
+let API_URL = (import.meta as any).env?.VITE_API_URL || '';
+if (API_URL.endsWith('/api')) {
+  API_URL = API_URL.slice(0, -4);
+}
 
 interface Message {
   id: number;

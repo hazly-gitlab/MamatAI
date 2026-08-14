@@ -20,7 +20,7 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json"
 )
 
-# CORS configuration: Allow standard local and production ingress origins cleanly
+# CORS configuration: Allow standard local, production, and dynamic network origins cleanly
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -31,6 +31,7 @@ app.add_middleware(
         "http://127.0.0.1:3000",
         "http://127.0.0.1:8000"
     ],
+    allow_origin_regex="https?://.*",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
