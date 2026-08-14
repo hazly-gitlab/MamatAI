@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: jarvis_postgres_dev
+    environment:
+      POSTGRES_USER: jarvis_user
+      POSTGRES_PASSWORD: jarvis_password
+      POSTGRES_DB: jarvis_db
+    volumes:
+      - postgres_data_dev:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  redis:
+    image: redis:alpine
+    container_name: jarvis_redis_dev
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jarvis_backend_dev
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://jarvis_user:jarvis_password@postgres:5432/jarvis_db
+      - REDIS_URL=redis://redis:6379/0
+      - APP_NAME=JARVIS
+      - SECRET_KEY=super_secret_jarvis_key_change_me_in_production
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      sh -c "python3 app/core/init_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jarvis_frontend_dev
+    ports:
+      - "3000:80"
+
+volumes:
+  postgres_data_dev:

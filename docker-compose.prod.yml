@@ -1,0 +1,67 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: ankane/pgvector:latest
+    container_name: jarvis_postgres_prod
+    restart: always
+    environment:
+      POSTGRES_USER: jarvis_user
+      POSTGRES_PASSWORD: jarvis_password
+      POSTGRES_DB: jarvis_db
+    volumes:
+      - postgres_data_prod:/var/lib/postgresql/data
+    security_opt:
+      - no-new-privileges:true
+
+  redis:
+    image: redis:alpine
+    container_name: jarvis_redis_prod
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: jarvis_backend_prod
+    restart: always
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://jarvis_user:jarvis_password@postgres:5432/jarvis_db
+      - REDIS_URL=redis://redis:6379/0
+      - APP_NAME=JARVIS
+      - SECRET_KEY=super_secret_jarvis_key_change_me_in_production
+    depends_on:
+      - postgres
+      - redis
+    command: >
+      sh -c "python3 app/core/init_db.py && uvicorn app.main:app --host 0.0.0.0 --port 8000"
+    security_opt:
+      - no-new-privileges:true
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: jarvis_frontend_prod
+    restart: always
+    security_opt:
+      - no-new-privileges:true
+
+  nginx:
+    image: nginx:alpine
+    container_name: jarvis_nginx_prod
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./infra/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    security_opt:
+      - no-new-privileges:true
+
+volumes:
+  postgres_data_prod:
