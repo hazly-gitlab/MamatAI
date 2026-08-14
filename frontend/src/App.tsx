@@ -6,8 +6,8 @@ import {
   FileCode, Plus, LogIn, HelpCircle
 } from 'lucide-react';
 
-// API endpoints with zero-configuration casting
-const API_URL = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000';
+// API endpoints with zero-configuration relative path default
+const API_URL = (import.meta as any).env?.VITE_API_URL || '';
 
 interface Message {
   id: number;
