@@ -1,8 +1,11 @@
 import pytest
-from backend.app.rag.vector_store import chunk_text, string_to_vector, cosine_similarity
-from backend.app.rag.reader import extract_document_text
-import tempfile
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
+from app.rag.vector_store import chunk_text, string_to_vector, cosine_similarity
+from app.rag.reader import extract_document_text
+import tempfile
 
 def test_chunking_and_vectors():
     text = "This is a very simple document that we want to slice into multiple overlapping sections."

@@ -3,9 +3,9 @@ import tempfile
 import os
 from typing import Optional
 
-from backend.app.api.deps import get_current_active_user
-from backend.app.models.models import User
-from backend.app.vision.vision import analyze_image_file
+from app.api.deps import get_current_active_user
+from app.models.models import User
+from app.vision.vision import analyze_image_file
 
 router = APIRouter()
 

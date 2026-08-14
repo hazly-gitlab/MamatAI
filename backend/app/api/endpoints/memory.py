@@ -3,9 +3,9 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List, Dict, Any
 
-from backend.app.api.deps import get_db, get_current_active_user
-from backend.app.models.models import Memory, User, Conversation, Message
-from backend.app.models.schemas import MemoryOut, MemoryCreate
+from app.api.deps import get_db, get_current_active_user
+from app.models.models import Memory, User, Conversation, Message
+from app.models.schemas import MemoryOut, MemoryCreate
 
 router = APIRouter()
 

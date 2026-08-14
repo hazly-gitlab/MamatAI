@@ -4,9 +4,9 @@ from io import BytesIO
 import tempfile
 import os
 
-from backend.app.api.deps import get_current_active_user
-from backend.app.models.models import User
-from backend.app.voice.speech import transcribe_audio, synthesize_speech
+from app.api.deps import get_current_active_user
+from app.models.models import User
+from app.voice.speech import transcribe_audio, synthesize_speech
 
 router = APIRouter()
 

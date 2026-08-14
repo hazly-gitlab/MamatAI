@@ -4,7 +4,7 @@ import asyncio
 import os
 from typing import AsyncGenerator, Dict, List, Any, Optional
 import httpx
-from backend.app.core.config import settings
+from app.core.config import settings
 
 class BaseLLMProvider(abc.ABC):
     @abc.abstractmethod

@@ -1,5 +1,9 @@
 import pytest
-from backend.app.tools.registry import (
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
+from app.tools.registry import (
     safe_eval,
     is_sql_safe,
     is_url_allowed,

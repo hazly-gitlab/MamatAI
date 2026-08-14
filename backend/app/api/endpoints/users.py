@@ -3,10 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 from typing import List
 
-from backend.app.api.deps import get_db, verify_admin
-from backend.app.models.models import User, UserRole
-from backend.app.models.schemas import UserOut, UserUpdate, UserCreate
-from backend.app.security.password import hash_password
+from app.api.deps import get_db, verify_admin
+from app.models.models import User, UserRole
+from app.models.schemas import UserOut, UserUpdate, UserCreate
+from app.security.password import hash_password
 
 router = APIRouter()
 

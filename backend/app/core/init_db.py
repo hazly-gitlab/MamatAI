@@ -4,10 +4,12 @@ import os
 from sqlalchemy import select
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
+# Add backend to sys.path to support local non-docker host executions flawlessly
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 
-from backend.app.core.database import Base, engine, AsyncSessionLocal
-from backend.app.models.models import User, UserRole, ToolSetting
-from backend.app.security.password import hash_password
+from app.core.database import Base, engine, AsyncSessionLocal
+from app.models.models import User, UserRole, ToolSetting
+from app.security.password import hash_password
 
 async def init_models():
     async with engine.begin() as conn:

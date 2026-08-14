@@ -1,6 +1,6 @@
 import json
 from typing import List, Dict, Any, Optional
-from backend.app.core.config import settings
+from app.core.config import settings
 
 SYSTEM_PROMPT_TEMPLATE = """
 Identity:

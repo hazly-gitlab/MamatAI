@@ -2,7 +2,7 @@ import os
 from io import BytesIO
 from typing import Optional
 from gtts import gTTS
-from backend.app.core.config import settings
+from app.core.config import settings
 
 def transcribe_audio(file_path: str, language: str = "en") -> str:
     """

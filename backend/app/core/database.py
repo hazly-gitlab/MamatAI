@@ -1,7 +1,7 @@
 import sys
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 from sqlalchemy.orm import DeclarativeBase
-from backend.app.core.config import settings
+from app.core.config import settings
 
 # In production or docker context, replace with asyncpg driver if postgresql is standard
 db_url = settings.DATABASE_URL

@@ -1,6 +1,10 @@
 import pytest
-from backend.app.security.password import hash_password, verify_password
-from backend.app.security.jwt import create_access_token, decode_access_token
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
+from app.security.password import hash_password, verify_password
+from app.security.jwt import create_access_token, decode_access_token
 
 def test_password_hashing():
     pw = "secretpassword123"

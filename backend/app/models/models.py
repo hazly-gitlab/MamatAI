@@ -3,7 +3,7 @@ from datetime import datetime
 from typing import List, Optional
 from sqlalchemy import String, Integer, Text, Boolean, DateTime, ForeignKey, Enum, JSON, Float
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from backend.app.core.database import Base
+from app.core.database import Base
 
 class UserRole(str, enum.Enum):
     ADMINISTRATOR = "administrator"

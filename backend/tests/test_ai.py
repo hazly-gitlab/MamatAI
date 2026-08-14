@@ -1,6 +1,10 @@
 import pytest
-from backend.app.ai.providers import get_llm_provider, MockLLMProvider
-from backend.app.ai.orchestrator import get_system_prompt, build_messages_with_context
+import sys
+import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
+from app.ai.providers import get_llm_provider, MockLLMProvider
+from app.ai.orchestrator import get_system_prompt, build_messages_with_context
 
 @pytest.mark.asyncio
 async def test_mock_provider_text():

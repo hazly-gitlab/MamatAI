@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from typing import Optional, Union, Any
 from jose import jwt
-from backend.app.core.config import settings
+from app.core.config import settings
 
 ALGORITHM = "HS256"
 

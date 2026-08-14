@@ -5,7 +5,7 @@ import psutil
 import httpx
 from typing import Dict, Any, Optional
 from urllib.parse import urlparse
-from backend.app.core.config import settings
+from app.core.config import settings
 
 # In-memory session check for safe demo databases (fallback to sqlite/in-memory if postgres is mock/not loaded)
 ALLOWED_DOMAINS = [d.strip() for d in settings.ALLOWED_HTTP_DOMAINS.split(",") if d.strip()]
@@ -134,7 +134,7 @@ async def handle_safe_sql_query(sql: str, db_connection_url: Optional[str] = Non
     # In order to support full standalone test-runs, let's execute SQL queries safely.
     # We will run this on a separate async engine using sqlite for testing or the real PostgreSQL engine if loaded.
     from sqlalchemy import text
-    from backend.app.core.database import engine
+    from app.core.database import engine
 
     try:
         async with engine.connect() as conn:

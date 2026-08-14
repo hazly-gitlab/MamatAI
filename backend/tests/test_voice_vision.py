@@ -1,7 +1,10 @@
 import pytest
-from backend.app.voice.speech import synthesize_speech, transcribe_audio
-from backend.app.vision.vision import analyze_image_file
+import sys
 import os
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../")))
+
+from app.voice.speech import synthesize_speech, transcribe_audio
+from app.vision.vision import analyze_image_file
 
 def test_speech_synthesis():
     audio_bytes = synthesize_speech("Hello, this is a test.", "en")

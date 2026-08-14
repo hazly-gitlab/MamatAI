@@ -4,10 +4,10 @@ from sqlalchemy import select
 from typing import List, Dict, Any
 from datetime import datetime
 
-from backend.app.api.deps import get_db, verify_admin, get_current_active_user
-from backend.app.models.models import ToolSetting, AuditLog, User
-from backend.app.models.schemas import ToolSettingOut, ToolSettingUpdate, AuditLogOut
-from backend.app.tools.registry import execute_tool
+from app.api.deps import get_db, verify_admin, get_current_active_user
+from app.models.models import ToolSetting, AuditLog, User
+from app.models.schemas import ToolSettingOut, ToolSettingUpdate, AuditLogOut
+from app.tools.registry import execute_tool
 
 router = APIRouter()
 

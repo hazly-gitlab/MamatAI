@@ -8,13 +8,13 @@ from sqlalchemy import select
 from typing import List, Dict, Any, Optional
 from datetime import datetime
 
-from backend.app.api.deps import get_db, get_current_active_user
-from backend.app.models.models import User, Conversation, Message, ToolSetting
-from backend.app.models.schemas import ConversationOut, ConversationDetail, MessageOut
-from backend.app.ai.providers import get_llm_provider
-from backend.app.ai.orchestrator import build_messages_with_context
-from backend.app.tools.registry import execute_tool
-from backend.app.api.endpoints.documents import search_relevant_chunks
+from app.api.deps import get_db, get_current_active_user
+from app.models.models import User, Conversation, Message, ToolSetting
+from app.models.schemas import ConversationOut, ConversationDetail, MessageOut
+from app.ai.providers import get_llm_provider
+from app.ai.orchestrator import build_messages_with_context
+from app.tools.registry import execute_tool
+from app.api.endpoints.documents import search_relevant_chunks
 
 router = APIRouter()
 

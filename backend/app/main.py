@@ -4,9 +4,9 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import logging
 
-from backend.app.core.config import settings
-from backend.app.core.database import Base, engine
-from backend.app.api.endpoints import auth, users, chat, tools, documents, voice, vision
+from app.core.config import settings
+from app.core.database import Base, engine
+from app.api.endpoints import auth, users, chat, tools, documents, voice, vision
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
@@ -41,7 +41,7 @@ app.add_middleware(
 async def add_process_time_and_rate_limit(request: Request, call_next):
     # Skip assets, docs, or healthchecks from rate limiting if desired
     if not request.url.path.startswith("/api/v1/auth/login") and request.url.path.startswith("/api/v1"):
-        from backend.app.security.rate_limiter import check_rate_limit
+        from app.security.rate_limiter import check_rate_limit
         try:
             await check_rate_limit(request)
         except HTTPException as he:

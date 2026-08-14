@@ -6,11 +6,11 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, File, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from backend.app.api.deps import get_db, get_current_active_user
-from backend.app.models.models import Document, DocumentChunk, User
-from backend.app.models.schemas import DocumentOut
-from backend.app.rag.reader import extract_document_text
-from backend.app.rag.vector_store import chunk_text, get_embedding, cosine_similarity
+from app.api.deps import get_db, get_current_active_user
+from app.models.models import Document, DocumentChunk, User
+from app.models.schemas import DocumentOut
+from app.rag.reader import extract_document_text
+from app.rag.vector_store import chunk_text, get_embedding, cosine_similarity
 
 router = APIRouter()
 

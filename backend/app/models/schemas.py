@@ -1,7 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field
 from typing import Optional, List, Dict, Any
 from datetime import datetime
-from backend.app.models.models import UserRole
+from app.models.models import UserRole
 
 # Auth Schemas
 class UserBase(BaseModel):
