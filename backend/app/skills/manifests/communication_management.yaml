@@ -1,0 +1,28 @@
+name: communication_management
+version: 1.0.0
+description: Executive communication, email drafting, speech synthesis formatting, multilingual translation, and notification dispatching.
+
+triggers:
+  - draft email
+  - format report
+  - translate to malay
+  - send notification
+  - communication summary
+  - improve communication
+
+tools:
+  - web_search
+  - http_request
+
+permissions:
+  level: read_only
+
+workflow:
+  - analyze_communication_intent
+  - refine_tone_and_clarity
+  - format_tts_speech_output
+  - execute_multilingual_translation
+  - dispatch_notification_alert
+
+verification:
+  required: true

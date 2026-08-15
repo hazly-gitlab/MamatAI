@@ -16,9 +16,18 @@ async def handle_self_improve_step(
 
     if step == "scan_execution_failures":
         failures = await scan_failures(db)
+        from app.skills.self_improve.learner import SelfLearner
+        learner = SelfLearner()
+
+        learned_patterns = []
+        for f in failures[:3]:
+            lp = await learner.extract_failure_pattern(f.get("error_message", "Unknown error"), [], db, user_id=user.id)
+            learned_patterns.append(lp)
+
         return {
             "status": "success",
             "failures_scanned": len(failures),
+            "learned_patterns": learned_patterns,
             "patterns": failures[:5]
         }
 

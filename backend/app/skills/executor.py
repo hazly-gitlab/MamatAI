@@ -186,6 +186,10 @@ class SkillExecutor:
             from app.skills.self_improve.evaluator import handle_self_improve_step
             return await handle_self_improve_step(step_clean, input_args, db, user)
 
+        elif skill_name == "communication_management":
+            from app.skills.communication.handler import handle_communication_step
+            return await handle_communication_step(step_clean, input_args, db)
+
         elif skill_name == "system_environment_management":
             from app.skills.diagnostics.system_environment import get_full_system_environment_report
             report = await get_full_system_environment_report(db)

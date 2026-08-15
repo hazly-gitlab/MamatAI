@@ -6,7 +6,7 @@ import logging
 
 from app.core.config import settings
 from app.core.database import Base, engine
-from app.api.endpoints import auth, users, chat, tools, documents, voice, vision, skills, system_research
+from app.api.endpoints import auth, users, chat, tools, documents, voice, vision, skills, system_research, memory
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
@@ -84,6 +84,7 @@ app.include_router(voice.router, prefix=f"{settings.API_V1_STR}/voice", tags=["V
 app.include_router(vision.router, prefix=f"{settings.API_V1_STR}/vision", tags=["Vision OCR & Analytics"])
 app.include_router(skills.router, prefix=f"{settings.API_V1_STR}/skills", tags=["Skill Engine"])
 app.include_router(system_research.router, prefix=f"{settings.API_V1_STR}", tags=["System & Research"])
+app.include_router(memory.router, prefix=f"{settings.API_V1_STR}/memory", tags=["Personal Memory"])
 
 # System Health endpoints
 @app.get("/health")

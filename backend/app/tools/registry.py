@@ -10,19 +10,62 @@ from app.core.config import settings
 # In-memory session check for safe demo databases (fallback to sqlite/in-memory if postgres is mock/not loaded)
 ALLOWED_DOMAINS = [d.strip() for d in settings.ALLOWED_HTTP_DOMAINS.split(",") if d.strip()]
 
-def safe_eval(expression: str) -> float:
-    """Safely evaluate math expressions without exposing builtins."""
-    allowed_names = {
-        k: v for k, v in math.__dict__.items() if not k.startswith("__")
-    }
-    allowed_names.update({
-        "abs": abs, "round": round, "min": min, "max": max, "sum": sum
-    })
+import ast
+import operator
 
-    # Simple sanitization to prevent block executes
-    cleaned = expression.replace("__", "").replace("import", "").replace("os", "").replace("sys", "")
-    # Evaluate expression under restricted globals
-    return eval(cleaned, {"__builtins__": {}}, allowed_names)
+OPERATORS = {
+    ast.Add: operator.add,
+    ast.Sub: operator.sub,
+    ast.Mult: operator.mul,
+    ast.Div: operator.truediv,
+    ast.FloorDiv: operator.floordiv,
+    ast.Mod: operator.mod,
+    ast.Pow: operator.pow,
+    ast.USub: operator.neg,
+    ast.UAdd: operator.pos,
+}
+
+def safe_eval(expression: str) -> float:
+    """Safely evaluate arithmetic expressions using AST parsing without eval()."""
+    def _eval_node(node):
+        if isinstance(node, ast.Constant):
+            if isinstance(node.value, (int, float)):
+                return node.value
+            raise ValueError("Invalid constant type in expression")
+        elif isinstance(node, ast.BinOp):
+            left = _eval_node(node.left)
+            right = _eval_node(node.right)
+            op_type = type(node.op)
+            if op_type in OPERATORS:
+                return OPERATORS[op_type](left, right)
+            raise ValueError(f"Unsupported binary operator: {op_type.__name__}")
+        elif isinstance(node, ast.UnaryOp):
+            operand = _eval_node(node.operand)
+            op_type = type(node.op)
+            if op_type in OPERATORS:
+                return OPERATORS[op_type](operand)
+            raise ValueError(f"Unsupported unary operator: {op_type.__name__}")
+        elif isinstance(node, ast.Name):
+            if node.id == "pi":
+                return math.pi
+            elif node.id == "e":
+                return math.e
+            raise ValueError(f"Undefined constant: {node.id}")
+        elif isinstance(node, ast.Call):
+            if isinstance(node.func, ast.Name) and node.func.id in ["abs", "round", "sqrt", "sin", "cos", "tan", "min", "max"]:
+                args = [_eval_node(arg) for arg in node.args]
+                func_map = {
+                    "abs": abs, "round": round, "sqrt": math.sqrt,
+                    "sin": math.sin, "cos": math.cos, "tan": math.tan,
+                    "min": min, "max": max
+                }
+                return func_map[node.func.id](*args)
+            raise ValueError("Unsupported function call")
+        else:
+            raise ValueError("Unsupported expression structure")
+
+    parsed = ast.parse(expression, mode='eval')
+    return float(_eval_node(parsed.body))
 
 def is_sql_safe(sql: str) -> bool:
     """Strictly validate SQL statement to enforce read-only database query limits."""
