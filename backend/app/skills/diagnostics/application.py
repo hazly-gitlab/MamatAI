@@ -6,7 +6,7 @@ logger = logging.getLogger("jarvis_app_diagnostics")
 async def get_recent_errors() -> str:
     return (
         "Traceback (most recent call last):\n"
-        "  File \"/app/backend/app/main.py\", line 15, in <module>\n"
+        "  File \"app/main.py\", line 15, in <module>\n"
         "    from app.core import database\n"
         "ModuleNotFoundError: No module named 'app.core'"
     )
@@ -32,7 +32,7 @@ async def handle_app_diagnostic_step(
 
     elif step == "isolate_affected_module":
         errors = await get_recent_errors()
-        file_ref = "/app/backend/app/main.py"
+        file_ref = "app/main.py"
         module_ref = "app.core"
         if "ModuleNotFoundError" in errors:
             module_ref = "app.core"

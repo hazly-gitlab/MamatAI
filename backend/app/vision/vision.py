@@ -19,7 +19,7 @@ def analyze_image_file(file_path: str, user_query: Optional[str] = None) -> str:
         return (
             "--- Vision OCR Analysis: Screenshot Error ---\n"
             "Detected: ConnectionRefusedError: [Errno 111] Connection refused\n"
-            "Traceback: File '/app/backend/app/core/database.py', line 15, in get_db\n"
+            "Traceback: File 'app/core/database.py', line 15, in get_db\n"
             "Details: The backend tried to connect to PostgreSQL at 'localhost:5432' but the database service is currently unreachable."
         )
     elif "diagram" in query_lower or "architecture" in query_lower:
