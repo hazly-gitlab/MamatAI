@@ -1,0 +1,29 @@
+name: self_improve
+version: 1.0.0
+description: Analyze execution logs and failure patterns to automatically propose, test, and promote improved skill workflows.
+
+triggers:
+  - self improve
+  - optimize workflow
+  - improve skill
+  - run self improvement
+  - evaluate skills
+
+tools:
+  - system_status
+  - safe_sql_query
+
+permissions:
+  level: sensitive
+
+workflow:
+  - scan_execution_failures
+  - analyze_repeated_failures
+  - propose_skill_optimizations
+  - generate_new_version
+  - benchmark_and_evaluate
+  - verify_no_regressions
+  - promote_skill_version
+
+verification:
+  required: true

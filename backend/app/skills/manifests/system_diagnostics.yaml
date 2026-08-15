@@ -1,0 +1,26 @@
+name: system_diagnostics
+version: 1.0.0
+description: Diagnose system status, CPU, memory, disk and core service health.
+
+triggers:
+  - system status
+  - check system health
+  - check backend
+  - cpu load
+  - system health
+  - jarvis status
+
+tools:
+  - system_status
+
+permissions:
+  level: read_only
+
+workflow:
+  - check_resources
+  - check_disk_space
+  - check_service_connections
+  - compile_health_report
+
+verification:
+  required: true

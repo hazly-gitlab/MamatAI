@@ -3,7 +3,7 @@ import {
   Bot, User as UserIcon, Send, Mic, MicOff, Volume2, Image as ImageIcon,
   FileText, RefreshCw, Trash2, Settings,
   Cpu, Database, Activity, CheckCircle2, AlertTriangle, LogOut, Check, X,
-  FileCode, Plus, LogIn, HelpCircle
+  FileCode, Plus, LogIn, HelpCircle, Zap, ShieldAlert, Wrench, TrendingUp
 } from 'lucide-react';
 
 // API endpoints with zero-configuration relative path default
@@ -37,7 +37,10 @@ export default function App() {
   const [authError, setAuthError] = useState('');
 
   // App Tabs/Views
-  const [activeTab, setActiveTab] = useState<'chat' | 'documents' | 'tools' | 'audit' | 'users'>('chat');
+  const [activeTab, setActiveTab] = useState<'chat' | 'documents' | 'skills' | 'tools' | 'audit' | 'users'>('chat');
+  const [skillsList, setSkillsList] = useState<any[]>([]);
+  const [repairJobs, setRepairJobs] = useState<any[]>([]);
+  const [improvements, setImprovements] = useState<any[]>([]);
 
   // Conversational states
   const [conversations, setConversations] = useState<Conversation[]>([]);
@@ -578,6 +581,73 @@ export default function App() {
     } catch (e) {}
   };
 
+  const fetchSkillsData = async () => {
+    try {
+      const resSkills = await fetch(`${API_URL}/api/v1/skills`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (resSkills.ok) setSkillsList(await resSkills.json());
+
+      const resJobs = await fetch(`${API_URL}/api/v1/skills/self-fix/jobs`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (resJobs.ok) setRepairJobs(await resJobs.json());
+
+      const resImp = await fetch(`${API_URL}/api/v1/skills/self-improvement/status`, {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (resImp.ok) setImprovements(await resImp.json());
+    } catch (e) {}
+  };
+
+  const handleExecuteSkill = async (skillName: string) => {
+    setSystemMessage(`Executing Autonomous Skill '${skillName}'...`);
+    try {
+      const res = await fetch(`${API_URL}/api/v1/skills/${skillName}/execute`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({})
+      });
+      if (res.ok) {
+        setSystemMessage(`Skill '${skillName}' executed successfully!`);
+        fetchSkillsData();
+      }
+    } catch (e) {
+      setSystemMessage(`Failed to execute skill.`);
+    }
+  };
+
+  const handleApproveRepair = async (jobId: number) => {
+    setSystemMessage(`Deploying patch for repair job #${jobId}...`);
+    try {
+      const res = await fetch(`${API_URL}/api/v1/skills/self-fix/${jobId}/approve`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setSystemMessage(`Repair job #${jobId} deployed and verified!`);
+        fetchSkillsData();
+      }
+    } catch (e) {}
+  };
+
+  const handleRollbackRepair = async (jobId: number) => {
+    setSystemMessage(`Rolling back repair job #${jobId}...`);
+    try {
+      const res = await fetch(`${API_URL}/api/v1/skills/self-fix/${jobId}/rollback`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        setSystemMessage(`Repair job #${jobId} rolled back to backup!`);
+        fetchSkillsData();
+      }
+    } catch (e) {}
+  };
+
   const fetchAuditLogs = async () => {
     try {
       const res = await fetch(`${API_URL}/api/v1/tools/audit`, {
@@ -768,6 +838,14 @@ export default function App() {
             </button>
             <button
               type="button"
+              onClick={() => { setActiveTab('skills'); fetchSkillsData(); }}
+              className={`py-1.5 text-xs font-bold rounded flex flex-col items-center justify-center gap-1 transition-all ${activeTab === 'skills' ? 'bg-cyan-950/50 border border-cyan-500/50 text-cyan-400' : 'bg-slate-900/30 text-slate-400 hover:bg-slate-900/50'}`}
+            >
+              <Zap className="h-4 w-4" />
+              <span>Skills</span>
+            </button>
+            <button
+              type="button"
               onClick={() => { setActiveTab('tools'); fetchTools(); }}
               className={`py-1.5 text-xs font-bold rounded flex flex-col items-center justify-center gap-1 transition-all ${activeTab === 'tools' ? 'bg-cyan-950/50 border border-cyan-500/50 text-cyan-400' : 'bg-slate-900/30 text-slate-400 hover:bg-slate-900/50'}`}
             >
@@ -864,6 +942,95 @@ export default function App() {
                       </button>
                     </div>
                   ))}
+                </div>
+              </div>
+            )}
+
+            {activeTab === 'skills' && (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">JARVIS Skill Registry</p>
+                  <button type="button" onClick={fetchSkillsData} className="text-slate-500 hover:text-slate-300">
+                    <RefreshCw className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+
+                <div className="space-y-2">
+                  {skillsList.map(sk => (
+                    <div key={sk.id} className="bg-slate-900/40 border border-slate-800 rounded-lg p-3 space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-xs font-bold text-cyan-400">{sk.name}</span>
+                        <span className="text-[9px] px-1.5 py-0.5 bg-slate-800 rounded text-slate-300 uppercase">v{sk.current_version}</span>
+                      </div>
+                      <p className="text-[10px] text-slate-400">{sk.description}</p>
+                      <div className="flex justify-between items-center pt-1">
+                        <span className={`text-[8px] uppercase px-1 rounded ${sk.risk_level === 0 ? 'bg-emerald-950 text-emerald-400' : sk.risk_level === 1 ? 'bg-blue-950 text-blue-400' : 'bg-yellow-950 text-yellow-400'}`}>
+                          Risk L{sk.risk_level}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => handleExecuteSkill(sk.name)}
+                          className="px-2 py-1 bg-cyan-950/60 hover:bg-cyan-900 border border-cyan-500/40 text-cyan-300 rounded text-[9px] font-bold"
+                        >
+                          Run Skill
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="pt-2 border-t border-slate-800 space-y-2">
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-1 text-teal-400">
+                    <Wrench className="h-3 w-3" /> Self-Healing Jobs
+                  </p>
+                  {repairJobs.length === 0 ? (
+                    <p className="text-[10px] text-slate-500 italic">No active or historical repair jobs.</p>
+                  ) : (
+                    repairJobs.map(job => (
+                      <div key={job.id} className="bg-[#0b1120] border border-slate-800 rounded-lg p-2.5 text-[10px] space-y-1.5">
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-slate-300">Job #{job.id}</span>
+                          <span className={`px-1 rounded text-[8px] uppercase ${job.status === 'verified' ? 'bg-emerald-950 text-emerald-400' : 'bg-yellow-950 text-yellow-400'}`}>{job.status}</span>
+                        </div>
+                        <p className="text-slate-400 truncate">{job.diagnosis || job.error}</p>
+                        <div className="flex gap-2 pt-1">
+                          <button
+                            type="button"
+                            onClick={() => handleApproveRepair(job.id)}
+                            className="bg-emerald-900 hover:bg-emerald-800 text-emerald-200 px-2 py-0.5 rounded text-[8px] font-bold"
+                          >
+                            Approve Fix
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => handleRollbackRepair(job.id)}
+                            className="bg-red-900 hover:bg-red-800 text-red-200 px-2 py-0.5 rounded text-[8px] font-bold"
+                          >
+                            Rollback
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+
+                <div className="pt-2 border-t border-slate-800 space-y-2">
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-1 text-cyan-400">
+                    <TrendingUp className="h-3 w-3" /> Self-Improvement Candidates
+                  </p>
+                  {improvements.length === 0 ? (
+                    <p className="text-[10px] text-slate-500 italic">No skill optimizations logged.</p>
+                  ) : (
+                    improvements.map(imp => (
+                      <div key={imp.id} className="bg-slate-900/40 border border-slate-800 rounded-lg p-2 text-[10px] space-y-1">
+                        <div className="flex justify-between items-center">
+                          <span className="font-bold text-cyan-300">v{imp.old_version} → v{imp.new_version}</span>
+                          <span className={`px-1 rounded text-[8px] uppercase ${imp.status === 'approved' ? 'bg-emerald-950 text-emerald-400' : 'bg-red-950 text-red-400'}`}>{imp.status}</span>
+                        </div>
+                        <p className="text-slate-400">{imp.reason}</p>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
             )}

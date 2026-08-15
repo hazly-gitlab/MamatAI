@@ -1,0 +1,29 @@
+name: database_diagnostics
+version: 1.0.0
+description: Diagnose database performance, connections and health problems.
+
+triggers:
+  - database slow
+  - database problem
+  - sql server slow
+  - database error
+  - database connection problem
+  - db health
+
+tools:
+  - system_status
+  - safe_sql_query
+
+permissions:
+  level: read_only
+
+workflow:
+  - collect_metrics
+  - inspect_connections
+  - inspect_errors
+  - detect_anomaly
+  - identify_root_cause
+  - generate_report
+
+verification:
+  required: true

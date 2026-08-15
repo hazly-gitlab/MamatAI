@@ -112,3 +112,89 @@ class AuditLog(Base):
     status: Mapped[str] = mapped_column(String(50)) # success, denied, failed, pending_confirmation
     approved_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
     execution_time_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+
+class Skill(Base):
+    __tablename__ = "skills"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    name: Mapped[str] = mapped_column(String(100), unique=True, index=True, nullable=False)
+    description: Mapped[str] = mapped_column(Text)
+    enabled: Mapped[bool] = mapped_column(Boolean, default=True)
+    current_version: Mapped[str] = mapped_column(String(50), default="1.0.0")
+    risk_level: Mapped[int] = mapped_column(Integer, default=0) # 0, 1, 2, 3
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    updated_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+class SkillVersion(Base):
+    __tablename__ = "skill_versions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    skill_id: Mapped[int] = mapped_column(Integer, ForeignKey("skills.id"), nullable=False)
+    version: Mapped[str] = mapped_column(String(50), nullable=False)
+    definition: Mapped[dict] = mapped_column(JSON, nullable=False) # manifest configuration dict
+    status: Mapped[str] = mapped_column(String(50), default="candidate") # active, candidate, superseded, rejected
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_by: Mapped[Optional[str]] = mapped_column(String(255), nullable=True)
+    evaluation_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+
+class SkillExecution(Base):
+    __tablename__ = "skill_executions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    skill_id: Mapped[int] = mapped_column(Integer, ForeignKey("skills.id"), nullable=False)
+    skill_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    input_data: Mapped[dict] = mapped_column(JSON, nullable=True)
+    output_data: Mapped[dict] = mapped_column(JSON, nullable=True)
+    status: Mapped[str] = mapped_column(String(50)) # success, failed, pending_confirmation
+    execution_time_ms: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class SkillFailure(Base):
+    __tablename__ = "skill_failures"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    skill_execution_id: Mapped[int] = mapped_column(Integer, ForeignKey("skill_executions.id"), nullable=False)
+    error_type: Mapped[str] = mapped_column(String(255), nullable=False)
+    error_message: Mapped[str] = mapped_column(Text, nullable=False)
+    root_cause: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    severity: Mapped[str] = mapped_column(String(50), default="high") # low, medium, high, critical
+    resolved: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class SkillImprovement(Base):
+    __tablename__ = "skill_improvements"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    skill_id: Mapped[int] = mapped_column(Integer, ForeignKey("skills.id"), nullable=False)
+    old_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    new_version: Mapped[str] = mapped_column(String(50), nullable=False)
+    reason: Mapped[str] = mapped_column(Text, nullable=False)
+    evaluation_score: Mapped[Optional[float]] = mapped_column(Float, nullable=True)
+    status: Mapped[str] = mapped_column(String(50), default="proposed") # proposed, approved, rejected, rolled_back
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class RepairJob(Base):
+    __tablename__ = "repair_jobs"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    error: Mapped[str] = mapped_column(Text, nullable=False)
+    diagnosis: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    proposed_fix: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    sandbox_path: Mapped[Optional[str]] = mapped_column(String(512), nullable=True)
+    test_result: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    verification_result: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    status: Mapped[str] = mapped_column(String(50), default="created") # created, diagnosing, fixing, testing, verified, approved, failed, rolled_back
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class EvaluationResult(Base):
+    __tablename__ = "evaluation_results"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    skill_id: Mapped[int] = mapped_column(Integer, ForeignKey("skills.id"), nullable=False)
+    version: Mapped[str] = mapped_column(String(50), nullable=False)
+    test_count: Mapped[int] = mapped_column(Integer, default=0)
+    passed_count: Mapped[int] = mapped_column(Integer, default=0)
+    failed_count: Mapped[int] = mapped_column(Integer, default=0)
+    score: Mapped[float] = mapped_column(Float, default=0.0)
+    regression_detected: Mapped[bool] = mapped_column(Boolean, default=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)

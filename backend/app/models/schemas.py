@@ -125,3 +125,97 @@ class MemoryOut(BaseModel):
 class MemoryCreate(BaseModel):
     content: str
     category: str = "general"
+
+# Skill Schemas
+class SkillOut(BaseModel):
+    id: int
+    name: str
+    description: str
+    enabled: bool
+    current_version: str
+    risk_level: int
+    created_at: datetime
+    updated_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class SkillVersionOut(BaseModel):
+    id: int
+    skill_id: int
+    version: str
+    definition: Dict[str, Any]
+    status: str
+    created_at: datetime
+    created_by: Optional[str] = None
+    evaluation_score: Optional[float] = None
+
+    class Config:
+        from_attributes = True
+
+class SkillExecutionOut(BaseModel):
+    id: int
+    skill_id: int
+    skill_version: str
+    input_data: Optional[Dict[str, Any]] = None
+    output_data: Optional[Dict[str, Any]] = None
+    status: str
+    execution_time_ms: Optional[float] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class SkillFailureOut(BaseModel):
+    id: int
+    skill_execution_id: int
+    error_type: str
+    error_message: str
+    root_cause: Optional[str] = None
+    severity: str
+    resolved: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class SkillImprovementOut(BaseModel):
+    id: int
+    skill_id: int
+    old_version: str
+    new_version: str
+    reason: str
+    evaluation_score: Optional[float] = None
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class RepairJobOut(BaseModel):
+    id: int
+    error: str
+    diagnosis: Optional[str] = None
+    proposed_fix: Optional[str] = None
+    sandbox_path: Optional[str] = None
+    test_result: Optional[str] = None
+    verification_result: Optional[str] = None
+    status: str
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class EvaluationResultOut(BaseModel):
+    id: int
+    skill_id: int
+    version: str
+    test_count: int
+    passed_count: int
+    failed_count: int
+    score: float
+    regression_detected: bool
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

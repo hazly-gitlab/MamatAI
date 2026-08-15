@@ -10,6 +10,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../"
 from app.core.database import Base, engine, AsyncSessionLocal
 from app.models.models import User, UserRole, ToolSetting
 from app.security.password import hash_password
+from app.skills.registry import SkillRegistry
 
 async def init_models():
     async with engine.begin() as conn:
@@ -53,6 +54,11 @@ async def seed_data():
                 tool = ToolSetting(**tool_data)
                 session.add(tool)
                 print(f"Seeded tool: {tool_data['name']}")
+
+        # Seed autonomous skill manifests
+        registry = SkillRegistry()
+        await registry.sync_manifests_to_db(session)
+        print("Autonomous Skill manifests synchronized successfully.")
 
         await session.commit()
     print("Seeding completed successfully.")

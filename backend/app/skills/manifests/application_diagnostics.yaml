@@ -1,0 +1,27 @@
+name: application_diagnostics
+version: 1.0.0
+description: Analyze application logs, Python exceptions, and service errors to locate bottlenecks.
+
+triggers:
+  - application error
+  - api slow
+  - fastapi error
+  - check logs
+  - check backend error
+  - view exceptions
+
+tools:
+  - system_status
+
+permissions:
+  level: read_only
+
+workflow:
+  - fetch_error_logs
+  - analyze_tracebacks
+  - isolate_affected_module
+  - determine_severity
+  - output_diagnosis
+
+verification:
+  required: true

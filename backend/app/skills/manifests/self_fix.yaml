@@ -1,0 +1,33 @@
+name: self_fix
+version: 1.0.0
+description: Automatically repair software bugs, missing module errors, or log tracebacks inside an isolated sandbox.
+
+triggers:
+  - fix the backend error
+  - self fix
+  - repair error
+  - auto fix
+  - repair bug
+  - fix it
+
+tools:
+  - system_status
+  - safe_sql_query
+
+permissions:
+  level: sensitive
+
+workflow:
+  - initiate_repair_job
+  - parse_error_logs
+  - identify_root_cause
+  - generate_safe_patch
+  - isolate_in_sandbox
+  - run_automated_tests
+  - verify_repaired_state
+  - request_deployment_approval
+  - apply_production_patch
+  - verify_production_health
+
+verification:
+  required: true

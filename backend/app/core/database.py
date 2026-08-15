@@ -3,18 +3,22 @@ from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, Asyn
 from sqlalchemy.orm import DeclarativeBase
 from app.core.config import settings
 
+import os
+
 # In production or docker context, replace with asyncpg driver if postgresql is standard
 db_url = settings.DATABASE_URL
 if db_url.startswith("postgresql://"):
     db_url = db_url.replace("postgresql://", "postgresql+asyncpg://")
+
+# Use local sqlite fallback when running tests outside docker container
+if os.environ.get("USE_SQLITE") == "1" or os.environ.get("TESTING") == "1":
+    db_url = "sqlite+aiosqlite:///jarvis_test.db"
 
 # Create Async Engine
 engine = create_async_engine(
     db_url,
     future=True,
     echo=False,
-    pool_size=20,
-    max_overflow=10,
 )
 
 AsyncSessionLocal = async_sessionmaker(
