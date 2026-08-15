@@ -9,15 +9,10 @@ def format_text_for_tts(text: str) -> str:
     Cleans markdown formatting, bolding, italics, bullet points, headers, and emojis
     to produce clean, fluid text compatible with Text-to-Speech audio synthesis.
     """
-    # Remove markdown bold/italics (* and _)
     cleaned = re.sub(r'[*_~`#]', '', text)
-    # Remove code blocks
     cleaned = re.sub(r'```[a-z]*\n[\s\S]*?\n```', 'code block omitted for brevity', cleaned)
-    # Remove URL links
     cleaned = re.sub(r'http[s]?://\S+', '', cleaned)
-    # Remove emojis or non-ascii symbols
     cleaned = cleaned.encode('ascii', 'ignore').decode('ascii')
-    # Clean whitespace
     cleaned = " ".join(cleaned.split())
     return cleaned
 
@@ -36,6 +31,20 @@ def translate_text(text: str, target_lang: str = "ms") -> str:
     else:
         return f"JARVIS system processed text: {text}"
 
+def synthesize_tone_options(text: str) -> Dict[str, str]:
+    """Generates 3 distinct tone options using active voice, clear analogies, and zero generic fluff."""
+    clean_text = format_text_for_tts(text)
+
+    option_1 = f"Executive Summary: {clean_text}. All operational metrics remain within optimal parameters, ensuring full system reliability."
+    option_2 = f"Here is what's happening: {clean_text}. Think of it like a well-tuned engine running at peak efficiency."
+    option_3 = f"System Update: {clean_text}. Zero bottlenecks. Maximum performance delivered."
+
+    return {
+        "option_1_professional": f"Option 1 (The Professional): {option_1}",
+        "option_2_conversational": f"Option 2 (The Conversational): {option_2}",
+        "option_3_punchy_bold": f"Option 3 (The Punchy & Bold): {option_3}"
+    }
+
 async def handle_communication_step(
     step: str,
     args: Dict[str, Any],
@@ -52,10 +61,11 @@ async def handle_communication_step(
         }
 
     elif step == "refine_tone_and_clarity":
-        refined = f"Certainly, Sir. {input_text}. All operational metrics remain within optimal parameters."
+        tones = synthesize_tone_options(input_text)
         return {
             "status": "success",
-            "refined_text": refined
+            "tone_options": tones,
+            "refined_text": tones["option_1_professional"]
         }
 
     elif step == "format_tts_speech_output":

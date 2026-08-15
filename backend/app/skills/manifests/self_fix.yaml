@@ -15,7 +15,7 @@ tools:
   - safe_sql_query
 
 permissions:
-  level: sensitive
+  level: low_risk
 
 workflow:
   - initiate_repair_job

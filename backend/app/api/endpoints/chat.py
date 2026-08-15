@@ -141,10 +141,11 @@ async def send_message(
     skill_result = await skill_engine.handle_conversational_skill(content, db, user)
 
     if skill_result:
+        s_name = skill_result.get("skill_name", "Autonomous Skill")
         if skill_result.get("status") == "pending_confirmation":
             pending_msg_text = (
-                f"JARVIS wishes to execute the Autonomous Skill '{skill_result['skill_name']}' with parameters:\n"
-                f"```json\n{json.dumps(skill_result['parameters'], indent=2)}\n```\n"
+                f"JARVIS wishes to execute the Autonomous Skill '{s_name}' with parameters:\n"
+                f"```json\n{json.dumps(skill_result.get('parameters', {}), indent=2)}\n```\n"
                 f"This sensitive action requires your explicit confirmation below."
             )
             assistant_msg = Message(
@@ -152,8 +153,8 @@ async def send_message(
                 role="assistant",
                 content=pending_msg_text,
                 attachments={
-                    "pending_skill": skill_result["skill_name"],
-                    "audit_id": skill_result["audit_id"],
+                    "pending_skill": s_name,
+                    "audit_id": skill_result.get("audit_id"),
                     "requires_approval": True
                 },
                 created_at=datetime.utcnow()
@@ -163,7 +164,7 @@ async def send_message(
             return {"status": "pending_confirmation", "message": assistant_msg}
         else:
             assistant_msg_text = (
-                f"Executed Autonomous Skill: **{skill_result['skill_name']} v{skill_result.get('version', '1.0.0')}**\n"
+                f"Executed Autonomous Skill: **{s_name} v{skill_result.get('version', '1.0.0')}**\n"
                 f"Execution status: **{skill_result.get('status')}** ({skill_result.get('execution_time_ms', 0):.1f}ms)\n\n"
                 f"```json\n{json.dumps(skill_result.get('trace', []), indent=2)}\n```"
             )
@@ -171,7 +172,7 @@ async def send_message(
                 conversation_id=conversation_id,
                 role="assistant",
                 content=assistant_msg_text,
-                attachments={"skill_executed": skill_result["skill_name"], "trace": skill_result.get("trace")},
+                attachments={"skill_executed": s_name, "trace": skill_result.get("trace")},
                 created_at=datetime.utcnow()
             )
             db.add(assistant_msg)
