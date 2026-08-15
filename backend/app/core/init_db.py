@@ -3,9 +3,11 @@ import sys
 import os
 from sqlalchemy import select
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../")))
-# Add backend to sys.path to support local non-docker host executions flawlessly
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
+# Add current app parent directory to sys.path safely
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.abspath(os.path.join(current_dir, "../.."))
+if parent_dir not in sys.path:
+    sys.path.insert(0, parent_dir)
 
 from app.core.database import Base, engine, AsyncSessionLocal
 from app.models.models import User, UserRole, ToolSetting
