@@ -186,4 +186,17 @@ class SkillExecutor:
             from app.skills.self_improve.evaluator import handle_self_improve_step
             return await handle_self_improve_step(step_clean, input_args, db, user)
 
+        elif skill_name == "system_environment_management":
+            from app.skills.diagnostics.system_environment import get_full_system_environment_report
+            report = await get_full_system_environment_report(db)
+            return {"status": "success", "report": report}
+
+        elif skill_name == "web_knowledge_research":
+            from app.skills.research.engine import ResearchEngine
+            query = input_args.get("query") or input_args.get("text") or "JARVIS autonomous system recommendations"
+            mode = input_args.get("mode", "quick")
+            engine = ResearchEngine()
+            res = await engine.conduct_research(query, user, db, mode=mode)
+            return {"status": "success", "research": res}
+
         return {"status": "success", "message": f"Step '{step_name}' bypassed (noop)."}

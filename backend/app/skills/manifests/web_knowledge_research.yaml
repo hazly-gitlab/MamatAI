@@ -1,0 +1,27 @@
+name: web_knowledge_research
+version: 1.0.0
+description: Conduct authoritative web and knowledge research with source scoring, citations, and conflict resolution.
+
+triggers:
+  - research
+  - research solutions
+  - search knowledge
+  - investigate
+  - research the latest
+
+tools:
+  - web_search
+  - http_request
+
+permissions:
+  level: read_only
+
+workflow:
+  - formulate_search_queries
+  - collect_and_score_sources
+  - extract_claims_and_citations
+  - detect_conflicting_views
+  - synthesize_research_report
+
+verification:
+  required: true

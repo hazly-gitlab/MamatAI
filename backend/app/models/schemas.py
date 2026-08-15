@@ -27,6 +27,56 @@ class UserOut(UserBase):
     class Config:
         from_attributes = True
 
+# Research Schemas
+class ResearchSourceOut(BaseModel):
+    id: int
+    session_id: int
+    url: str
+    title: str
+    snippet: str
+    authoritative: bool
+    score: float
+
+    class Config:
+        from_attributes = True
+
+class ResearchFindingOut(BaseModel):
+    id: int
+    session_id: int
+    claim: str
+    evidence: str
+    citation: str
+
+    class Config:
+        from_attributes = True
+
+class ResearchConflictOut(BaseModel):
+    id: int
+    session_id: int
+    topic: str
+    point_a: str
+    point_b: str
+    resolution: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
+class ResearchSessionOut(BaseModel):
+    id: int
+    user_id: int
+    query: str
+    mode: str
+    confidence_score: float
+    synthesis: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True
+
+class ResearchCreate(BaseModel):
+    query: str
+    mode: Optional[str] = "quick"
+
 class Token(BaseModel):
     access_token: str
     token_type: str

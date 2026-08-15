@@ -1,0 +1,27 @@
+name: system_environment_management
+version: 1.0.0
+description: Complete non-fabricated environment audit of OS, CPU, RAM, Storage, Network, Docker, Postgres, and Redis health.
+
+triggers:
+  - check my system
+  - system environment
+  - why is my backend unhealthy
+  - environment status
+  - check environment
+  - inspect local environment
+
+tools:
+  - system_status
+  - safe_sql_query
+
+permissions:
+  level: read_only
+
+workflow:
+  - inspect_os_and_hardware
+  - inspect_container_environment
+  - ping_backing_services
+  - compile_environment_audit
+
+verification:
+  required: true

@@ -198,3 +198,44 @@ class EvaluationResult(Base):
     score: Mapped[float] = mapped_column(Float, default=0.0)
     regression_detected: Mapped[bool] = mapped_column(Boolean, default=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class ResearchSession(Base):
+    __tablename__ = "research_sessions"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    user_id: Mapped[int] = mapped_column(Integer, ForeignKey("users.id"), nullable=False)
+    query: Mapped[str] = mapped_column(Text, nullable=False)
+    mode: Mapped[str] = mapped_column(String(50), default="quick")
+    confidence_score: Mapped[float] = mapped_column(Float, default=0.85)
+    synthesis: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow)
+
+class ResearchSource(Base):
+    __tablename__ = "research_sources"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    session_id: Mapped[int] = mapped_column(Integer, ForeignKey("research_sessions.id"), nullable=False)
+    url: Mapped[str] = mapped_column(String(512), nullable=False)
+    title: Mapped[str] = mapped_column(String(255), nullable=False)
+    snippet: Mapped[str] = mapped_column(Text, nullable=False)
+    authoritative: Mapped[bool] = mapped_column(Boolean, default=False)
+    score: Mapped[float] = mapped_column(Float, default=0.80)
+
+class ResearchFinding(Base):
+    __tablename__ = "research_findings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    session_id: Mapped[int] = mapped_column(Integer, ForeignKey("research_sessions.id"), nullable=False)
+    claim: Mapped[str] = mapped_column(Text, nullable=False)
+    evidence: Mapped[str] = mapped_column(Text, nullable=False)
+    citation: Mapped[str] = mapped_column(String(255), nullable=False)
+
+class ResearchConflict(Base):
+    __tablename__ = "research_conflicts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, index=True)
+    session_id: Mapped[int] = mapped_column(Integer, ForeignKey("research_sessions.id"), nullable=False)
+    topic: Mapped[str] = mapped_column(String(255), nullable=False)
+    point_a: Mapped[str] = mapped_column(Text, nullable=False)
+    point_b: Mapped[str] = mapped_column(Text, nullable=False)
+    resolution: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
