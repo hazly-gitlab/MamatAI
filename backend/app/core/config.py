@@ -2,7 +2,7 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    APP_NAME: str = "JARVIS"
+    APP_NAME: str = "MAMAT AI"
     APP_URL: str = "http://localhost"
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = "super_secret_jarvis_key_change_me_in_production"

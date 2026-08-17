@@ -276,6 +276,14 @@ class HybridLLMProvider(BaseLLMProvider):
         if got_ollama:
             return
 
+        # Strictly enforce real AI provider errors in non-mock configurations
+        if settings.LLM_PROVIDER.lower() != "mock":
+            yield {
+                "type": "error",
+                "data": "LLM_PROVIDER_UNAVAILABLE: Configured AI providers (Ollama / OpenRouter) are currently unreachable. Please check network connectivity and service credentials."
+            }
+            return
+
         async for chunk in self.mock.chat_completion(messages, tools, stream):
             yield chunk
 

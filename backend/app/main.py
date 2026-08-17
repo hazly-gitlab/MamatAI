@@ -10,11 +10,11 @@ from app.api.endpoints import auth, users, chat, tools, documents, voice, vision
 
 # Setup Logging
 logging.basicConfig(level=logging.INFO)
-logger = logging.getLogger("jarvis_app")
+logger = logging.getLogger("mamat_ai_app")
 
 app = FastAPI(
     title=settings.APP_NAME,
-    description="Futuristic JARVIS-like Personal & Organizational AI Control Center",
+    description="Futuristic MAMAT AI Personal & Organizational AI Control Center",
     version="1.0.0",
     docs_url="/docs",
     openapi_url=f"{settings.API_V1_STR}/openapi.json"

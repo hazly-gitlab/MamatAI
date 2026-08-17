@@ -27,9 +27,9 @@ def translate_text(text: str, target_lang: str = "ms") -> str:
         elif "research" in text_lower:
             return "Laporan penyelidikan telah disintesis dengan jaminan ketepatan sumber, Tuan."
         else:
-            return f"Sistem JARVIS telah memproses mesej anda: {text}"
+            return f"Sistem MAMAT AI telah memproses mesej anda: {text}"
     else:
-        return f"JARVIS system processed text: {text}"
+        return f"MAMAT AI system processed text: {text}"
 
 def synthesize_tone_options(text: str) -> Dict[str, str]:
     """Generates 3 distinct tone options using active voice, clear analogies, and zero generic fluff."""
@@ -51,7 +51,7 @@ async def handle_communication_step(
     db
 ) -> Dict[str, Any]:
     """Handles communication skill steps."""
-    input_text = args.get("text") or args.get("query") or "JARVIS executive report summary"
+    input_text = args.get("text") or args.get("query") or "MAMAT AI executive report summary"
 
     if step == "analyze_communication_intent":
         return {
@@ -88,7 +88,7 @@ async def handle_communication_step(
         return {
             "status": "success",
             "dispatched": True,
-            "channel": "JARVIS Control Center Console",
+            "channel": "MAMAT AI Control Center Console",
             "message": "Executive notification dispatched successfully."
         }
 

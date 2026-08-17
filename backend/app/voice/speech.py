@@ -60,7 +60,7 @@ def transcribe_audio(file_path: str, language: str = "en") -> str:
             pass
 
     # Return mock/test transcription fallback
-    return "Hello JARVIS, run a system status report and calculate 10 times 5."
+    return "Hello MAMAT AI, run a system status report and calculate 10 times 5."
 
 def synthesize_speech(text: str, language: str = "en") -> bytes:
     """

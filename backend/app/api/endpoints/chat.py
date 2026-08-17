@@ -144,7 +144,7 @@ async def send_message(
         s_name = skill_result.get("skill_name", "Autonomous Skill")
         if skill_result.get("status") == "pending_confirmation":
             pending_msg_text = (
-                f"JARVIS wishes to execute the Autonomous Skill '{s_name}' with parameters:\n"
+                f"MAMAT AI wishes to execute the Autonomous Skill '{s_name}' with parameters:\n"
                 f"```json\n{json.dumps(skill_result.get('parameters', {}), indent=2)}\n```\n"
                 f"This sensitive action requires your explicit confirmation below."
             )
@@ -243,7 +243,7 @@ async def send_message(
             # We must pause the AI and request user confirmation.
             # Return a special payload to the frontend.
             pending_response_content = (
-                f"JARVIS wishes to run the tool '{tool_triggered}' with arguments:\n"
+                f"MAMAT AI wishes to run the tool '{tool_triggered}' with arguments:\n"
                 f"```json\n{json.dumps(tool_call_details, indent=2)}\n```\n"
                 f"Please confirm or deny this action below."
             )
@@ -325,7 +325,7 @@ async def send_message_stream(
     async def sse_event_generator():
         provider = get_llm_provider()
         # Build simple mock query list
-        messages_list = [{"role": "system", "content": "You are JARVIS"}, {"role": "user", "content": content}]
+        messages_list = [{"role": "system", "content": f"You are {settings.APP_NAME}"}, {"role": "user", "content": content}]
 
         async for chunk in provider.chat_completion(messages_list, stream=True):
             if chunk["type"] == "content":

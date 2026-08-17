@@ -693,7 +693,7 @@ export default function App() {
             <div className="h-16 w-16 bg-cyan-950/50 border border-cyan-500 rounded-full flex items-center justify-center mb-4 shadow-[0_0_20px_rgba(6,182,212,0.4)] animate-pulse">
               <Bot className="h-8 w-8 text-cyan-400" />
             </div>
-            <h1 className="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">JARVIS SYSTEM</h1>
+            <h1 className="text-3xl font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">MAMAT AI SYSTEM</h1>
             <p className="text-xs text-slate-400 uppercase tracking-widest mt-1">Autonomous AI Control Center</p>
           </div>
 
@@ -789,7 +789,7 @@ export default function App() {
             <Bot className="h-5 w-5 text-cyan-400 animate-pulse" />
           </div>
           <div>
-            <h1 className="text-lg font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">JARVIS CONTROL CENTRE</h1>
+            <h1 className="text-lg font-extrabold tracking-wider bg-gradient-to-r from-cyan-400 to-teal-400 bg-clip-text text-transparent">MAMAT AI CONTROL CENTRE</h1>
             <p className="text-[10px] text-slate-400 uppercase tracking-widest">Active User: {currentUser?.email} ({currentUser?.role})</p>
           </div>
         </div>
@@ -949,7 +949,7 @@ export default function App() {
             {activeTab === 'skills' && (
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
-                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">JARVIS Skill Registry</p>
+                  <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">MAMAT AI Skill Registry</p>
                   <button type="button" onClick={fetchSkillsData} className="text-slate-500 hover:text-slate-300">
                     <RefreshCw className="h-3.5 w-3.5" />
                   </button>
@@ -1138,7 +1138,7 @@ export default function App() {
                 </div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-200">Autonomous Core Standby</h3>
-                  <p className="text-sm text-slate-400 mt-1">Please select an existing holographic memory node or initialize a new chat to begin interacting with JARVIS.</p>
+                  <p className="text-sm text-slate-400 mt-1">Please select an existing holographic memory node or initialize a new chat to begin interacting with MAMAT AI.</p>
                 </div>
               </div>
             ) : messages.length === 0 ? (
@@ -1159,7 +1159,7 @@ export default function App() {
 
                   <div className="flex-1 space-y-3 overflow-x-auto">
                     <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold">
-                      {msg.role === 'user' ? 'Secure Access Node' : 'JARVIS Autonomous Response'} • {new Date(msg.created_at).toLocaleTimeString()}
+                      {msg.role === 'user' ? 'Secure Access Node' : 'MAMAT AI Autonomous Response'} • {new Date(msg.created_at).toLocaleTimeString()}
                     </p>
 
                     {/* Render message string content */}
@@ -1306,7 +1306,7 @@ export default function App() {
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
                 disabled={!activeConversationId || isGenerating}
-                placeholder={!activeConversationId ? "Core standby..." : "Address JARVIS terminal..."}
+                placeholder={!activeConversationId ? "Core standby..." : "Address MAMAT AI terminal..."}
                 className="flex-1 bg-[#05070c] border border-slate-800 rounded-xl px-4 py-3 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all"
               />
 
