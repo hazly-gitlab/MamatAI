@@ -17,12 +17,15 @@ class Settings(BaseSettings):
     LLM_MODEL: str = "gpt-4o"
     OPENROUTER_API_KEY: str = ""
     OPENROUTER_MODEL: str = "anthropic/claude-3.5-sonnet"
+    GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_AUDIO_MODEL: str = "gemini-2.5-flash"
     OLLAMA_BASE_URL: str = "http://localhost:11434"
     OLLAMA_MODEL: str = "llama3.2"
     EMBEDDING_MODEL: str = "text-embedding-3-small"
-    STT_PROVIDER: str = "mock"  # mock, openai, local
-    TTS_PROVIDER: str = "mock"  # mock, openai, local
-    VISION_PROVIDER: str = "mock"  # mock, openai, local
+    STT_PROVIDER: str = "gemini"  # mock, gemini, openai, local
+    TTS_PROVIDER: str = "gemini"  # mock, gemini, openai, local
+    VISION_PROVIDER: str = "mock"  # mock, gemini, openai, local
 
     # Allowlist for SQL/HTTP requests
     ALLOWED_HTTP_DOMAINS: str = "api.weatherapi.com,wttr.in,api.github.com"
