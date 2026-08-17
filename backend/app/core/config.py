@@ -16,7 +16,7 @@ class Settings(BaseSettings):
     LLM_PROVIDER: str = "hybrid"  # mock, hybrid, openai, ollama, openrouter
     LLM_MODEL: str = "gpt-4o"
     OPENROUTER_API_KEY: str = ""
-    OPENROUTER_MODEL: str = "anthropic/claude-3.5-sonnet"
+    OPENROUTER_MODEL: str = "openrouter/free"
     GEMINI_API_KEY: str = ""
     GEMINI_MODEL: str = "gemini-2.5-flash"
     GEMINI_AUDIO_MODEL: str = "gemini-2.5-flash"
