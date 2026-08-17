@@ -12,9 +12,13 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "postgresql+asyncpg://jarvis_user:jarvis_password@localhost:5432/jarvis_db"
     REDIS_URL: str = "redis://localhost:6379/0"
 
-    # AI Providers (Configurable via UI or Admin panel, default to mock/openai)
-    LLM_PROVIDER: str = "mock"  # mock, openai, ollama
+    # AI Providers (Configurable via UI or Admin panel, default to mock/hybrid/openai/ollama/openrouter)
+    LLM_PROVIDER: str = "hybrid"  # mock, hybrid, openai, ollama, openrouter
     LLM_MODEL: str = "gpt-4o"
+    OPENROUTER_API_KEY: str = ""
+    OPENROUTER_MODEL: str = "anthropic/claude-3.5-sonnet"
+    OLLAMA_BASE_URL: str = "http://localhost:11434"
+    OLLAMA_MODEL: str = "llama3.2"
     EMBEDDING_MODEL: str = "text-embedding-3-small"
     STT_PROVIDER: str = "mock"  # mock, openai, local
     TTS_PROVIDER: str = "mock"  # mock, openai, local
