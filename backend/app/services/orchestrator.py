@@ -217,9 +217,9 @@ class AIOrchestrator:
             tool_context = ""
 
         sys_prompt = (
-            f"You are {settings.APP_NAME}, a highly advanced personal/organizational AI assistant. "
-            "Respond in a polished, highly responsive, helpful style. "
-            "Maintain context using user references where available.\n"
+            f"You are {settings.APP_NAME}, an advanced personal/organizational AI assistant. "
+            "Remain calm, direct, and professional. Prioritize tool usage over guessing, and keep responses concise. "
+            "Support English and Bahasa Melayu queries seamlessly.\n"
             f"{context['rag_context']}"
             f"{tool_context}"
         )
