@@ -5,7 +5,7 @@ from app.rag.vector_index import add_to_index, search_index
 
 @pytest.mark.asyncio
 async def test_rag_vector_search():
-    add_to_index(doc_id=99, filename="security_policy.pdf", text="All administrative sessions must enforce multi-factor authentication.")
+    add_to_index(document_id=99, filename="security_policy.pdf", text="All administrative sessions must enforce multi-factor authentication.")
     results = search_index("multi-factor authentication")
     assert len(results) > 0
     assert results[0]["filename"] == "security_policy.pdf"

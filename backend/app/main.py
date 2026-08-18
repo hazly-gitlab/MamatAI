@@ -5,6 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from app.core.config import settings
 from app.core.middleware import SecurityHeadersMiddleware, RateLimitMiddleware
+from app.core.database import engine, Base
 
 from app.api.auth_router import router as auth_router
 from app.api.conversation_router import router as conversation_router
@@ -26,6 +27,14 @@ app = FastAPI(
     docs_url="/api/docs",
     openapi_url="/api/v1/openapi.json"
 )
+
+# Initialize database schema tables on startup
+@app.on_event("startup")
+async def startup_db():
+    logger.info("Initializing database schemas...")
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
+    logger.info("Database schemas initialized successfully.")
 
 app.add_middleware(
     CORSMiddleware,
