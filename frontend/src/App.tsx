@@ -48,7 +48,7 @@ export default function App() {
   const [isGenerating, setIsGenerating] = useState(false);
 
   const [sysHealth, setSysHealth] = useState<any>({ status: 'healthy', load: '1.24%' });
-  const [aiProvider, setAiProvider] = useState('local_mock');
+  const [aiProvider, setAiProvider] = useState('openai');
   const [aiModel, setAiModel] = useState('gpt-4o-mini');
   const [latency, setLatency] = useState<number>(120);
 

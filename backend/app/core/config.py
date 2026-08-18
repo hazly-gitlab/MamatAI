@@ -2,7 +2,7 @@ import os
 from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
-    APP_NAME: str = "JARVIS"
+    APP_NAME: str = "MAMAT AI"
     APP_URL: str = "http://localhost"
     API_URL: str = "http://localhost/api/v1"
     PORT: int = 8000
@@ -13,17 +13,19 @@ class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite+aiosqlite:///jarvis.db"
     REDIS_URL: str = "redis://localhost:6379/0"
 
-    LLM_PROVIDER: str = "local_mock"
+    # Default to real LLM provider (OpenAI / OpenRouter)
+    LLM_PROVIDER: str = "openai"
     LLM_MODEL: str = "gpt-4o-mini"
     OLLAMA_BASE_URL: str = "http://localhost:11434"
-    OPENAI_API_KEY: str = "mock-key-not-empty"
+    OPENAI_API_KEY: str = ""
+    OPENROUTER_API_KEY: str = ""
 
-    EMBEDDING_PROVIDER: str = "local_mock"
+    EMBEDDING_PROVIDER: str = "openai"
     EMBEDDING_MODEL: str = "text-embedding-3-small"
 
     STT_PROVIDER: str = "browser"
     TTS_PROVIDER: str = "browser"
-    VISION_PROVIDER: str = "local_mock"
+    VISION_PROVIDER: str = "openai"
 
     UPLOAD_DIR: str = "./data/uploads"
     MAX_UPLOAD_SIZE_MB: int = 10
